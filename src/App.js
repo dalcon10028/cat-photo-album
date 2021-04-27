@@ -1,22 +1,23 @@
 import Breadcrumb from './components/Breadcrumb.js'
 import Nodes from './components/Nodes.js'
+import api from './api/index.js'
 
 export default class App {
   constructor ($app) {
     this.state = {
-      nodes: [{
-        name: '고양이'
-      }]
+      isRoot: false,
+      nodes: [],
+      depth: []
     }
-
+    // breadcrumb 생성
     const breadcrumb = new Breadcrumb({
-      $app
+      $app,
+      initialState: root
     })
+    // Nodes 생성
     const nodes = new Nodes({
-      $app
-    //   initialState: {
-    //     nodes: this.state.nodes
-    //   }
+      $app,
+      initialState: root
     })
   }
 }
