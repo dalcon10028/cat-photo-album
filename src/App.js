@@ -1,5 +1,6 @@
 import Breadcrumb from './components/Breadcrumb.js'
 import Nodes from './components/Nodes.js'
+import ImageView from './components/ImageView.js'
 import api from './api/index.js'
 
 export default class App {
@@ -7,8 +8,15 @@ export default class App {
     this.state = {
       isRoot: false,
       nodes: [],
-      depth: []
+      depth: [],
+      selectedFilePath: null
     }
+    // imageView 생성
+    this.imageView = new ImageView({
+      $app,
+      initialState: this.state.selectedNodeImage
+    })
+
     // breadcrumb 생성
     this.breadcrumb = new Breadcrumb({
       $app,
@@ -21,11 +29,53 @@ export default class App {
         isRoot: this.state.isRoot,
         nodes: this.state.nodes
       },
-      onClick: (node) => {
-        if (node.type === 'DIRECTORY') {
-          // 디렉토리인 경우 처리
-        } else if (node.type === 'FILE') {
-          // 파일인 경우 처리
+      onClick: async (node) => {
+        try {
+          if (node.type === 'DIRECTORY') {
+            // 디렉토리인 경우 처리
+            const nextNodes = await api.fetchDirectory(node.id)
+            this.setState({
+              ...this.state,
+              depth: [...this.state.depth, node],
+              nodes: nextNodes,
+              isRoot: false
+            })
+          } else if (node.type === 'FILE') {
+            // 파일인 경우 이미지 보기 처리
+            this.setState({
+              ...this.state,
+              selectedFilePath: node.filePath
+            })
+          }
+        } catch (error) {
+          throw new Error(error.message)
+        }
+      },
+      onBackClick: async () => {
+        try {
+          // 이전 state를 복사하여 처리
+          const nextState = { ...this.state }
+          nextState.depth.pop()
+          const prevNodeId = nextState.depth.length === 0 ? null : nextState.depth[nextState.depth.length - 1].id
+
+          // root로 온 경우이므로 root 처리
+          if (prevNodeId === null) {
+            const rootNodes = await api.fetchRoot()
+            this.setState({
+              ...nextState,
+              isRoot: true,
+              nodes: rootNodes
+            })
+          } else {
+            const prevNodes = await api.fetchDirectory(prevNodeId)
+            this.setState({
+              ...nextState,
+              isRoot: false,
+              nodes: prevNodes
+            })
+          }
+        } catch (error) {
+          throw new Error(error.message)
         }
       }
     })
@@ -53,5 +103,6 @@ export default class App {
       isRoot: this.state.isRoot,
       nodes: this.state.nodes
     })
+    this.imageView.setState(this.state.selectedFilePath)
   }
 }

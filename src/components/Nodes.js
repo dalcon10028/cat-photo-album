@@ -1,12 +1,11 @@
-import Node from './Node.js'
-
 export default class Nodes {
-  constructor ({ $app, initialState, onClick }) {
+  constructor ({ $app, initialState, onClick, onBackClick }) {
     this.state = initialState
     this.$target = document.createElement('div')
     this.$target.className = 'Nodes'
     $app.appendChild(this.$target)
     this.onClick = onClick
+    this.onBackClick = onBackClick
 
     this.render()
   }
@@ -17,7 +16,7 @@ export default class Nodes {
   }
 
   render () {
-    this.$target.innerHTML = this.state.nodes.map(node => `<li>${node.name}</li>`)
+    // this.$target.innerHTML = this.state.nodes.map(node => `<li>${node.name}</li>`)
 
     if (this.state.nodes) {
       const nodesTemplate = this.state.nodes.map(node => {
@@ -31,12 +30,19 @@ export default class Nodes {
         `
       }).join('')
 
-      this.$target.innerHTML = !this.state.isRoot ? `<div class="Node"><img src="/assets/prev.png"></div>${nodesTemplate}` : nodesTemplate
+      // root directory 렌더링이 아닌 경우 뒤로가기를 렌더링
+      // 뒤로가기의 경우 data-node-id attribute를 렌더링하지 않음
+      this.$target.innerHTML = !this.state.isRoot ? `<div class="Node"><img src="./assets/prev.png"></div>${nodesTemplate}` : nodesTemplate
     }
 
     this.$target.querySelectorAll('.Node').forEach($node => {
-      $node.addEventListener('click', e => {
+      $node.addEventListener('click', (e) => {
+        // dataset을 통해 data-로 시작하는 attribute를 꺼내올 수 있음
         const { nodeId } = e.target.dataset
+        // nodeId가 없는 경우 뒤로가기를 누른 케이스
+        if (!nodeId) {
+          this.onBackClick()
+        }
         const selectedNode = this.state.nodes.find(node => node.id === nodeId)
 
         if (selectedNode) {
