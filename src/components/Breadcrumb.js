@@ -15,6 +15,6 @@ export default class Breadcrumb {
 
   render () {
     this.$target.innerHTML = `<div class="nav-item">root</div>${
-        this.state.nodes.map((node, index) => `<div class="nav-item" data-index="${index}">${node.name}</div>`).join('')}`
+        this.state.map((node, index) => `<div class="nav-item" data-index="${index}">${node.name}</div>`).join('')}`
   }
 }
