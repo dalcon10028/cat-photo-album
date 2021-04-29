@@ -1,6 +1,7 @@
 import Breadcrumb from './components/Breadcrumb.js'
 import Nodes from './components/Nodes.js'
 import ImageView from './components/ImageView.js'
+import Loading from './components/Loading.js'
 import api from './api/index.js'
 
 export default class App {
@@ -9,8 +10,15 @@ export default class App {
       isRoot: false,
       nodes: [],
       depth: [],
-      selectedFilePath: null
+      selectedFilePath: null,
+      isLoading: true
     }
+    // Loading 생성
+    this.loading = new Loading({
+      $app,
+      initialState: this.state.isLoading
+    })
+
     // imageView 생성
     this.imageView = new ImageView({
       $app,
@@ -31,6 +39,10 @@ export default class App {
       },
       onClick: async (node) => {
         try {
+          this.setState({
+            ...this.state,
+            isLoading: true
+          })
           if (node.type === 'DIRECTORY') {
             // 디렉토리인 경우 처리
             const nextNodes = await api.fetchDirectory(node.id)
@@ -49,10 +61,20 @@ export default class App {
           }
         } catch (error) {
           throw new Error(error.message)
+        } finally {
+          this.setState({
+            ...this.state,
+            isLoading: false
+          })
         }
       },
       onBackClick: async () => {
         try {
+          this.setState({
+            ...this.state,
+            isLoading: true
+          })
+
           // 이전 state를 복사하여 처리
           const nextState = { ...this.state }
           nextState.depth.pop()
@@ -76,12 +98,21 @@ export default class App {
           }
         } catch (error) {
           throw new Error(error.message)
+        } finally {
+          this.setState({
+            ...this.state,
+            isLoading: false
+          })
         }
       }
     })
 
     const init = async () => {
       try {
+        this.setState({
+          ...this.state,
+          isLoading: true
+        })
         const rootNodes = await api.fetchRoot()
         this.setState({
           ...this.state,
@@ -90,6 +121,11 @@ export default class App {
         })
       } catch (error) {
         throw new Error(`무언가 잘못 되었습니다! ${error.message}`)
+      } finally {
+        this.setState({
+          ...this.state,
+          isLoading: false
+        })
       }
     }
 
@@ -104,5 +140,6 @@ export default class App {
       nodes: this.state.nodes
     })
     this.imageView.setState(this.state.selectedFilePath)
+    this.loading.setState(this.state.isLoading)
   }
 }
