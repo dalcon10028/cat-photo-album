@@ -4,14 +4,16 @@ import ImageView from './components/ImageView.js'
 import Loading from './components/Loading.js'
 import api from './api/index.js'
 
+// nodeId: nodes 형태로 데이터를 불러올 때마다 이곳에 데이터를 쌓는다.
+const cache = {}
+
 export default class App {
   constructor ($app) {
     this.state = {
       isRoot: false,
       nodes: [],
       depth: [],
-      selectedFilePath: null,
-      isLoading: true
+      selectedFilePath: null
     }
     // Loading 생성
     this.loading = new Loading({
@@ -45,13 +47,23 @@ export default class App {
           })
           if (node.type === 'DIRECTORY') {
             // 디렉토리인 경우 처리
-            const nextNodes = await api.fetchDirectory(node.id)
-            this.setState({
-              ...this.state,
-              depth: [...this.state.depth, node],
-              nodes: nextNodes,
-              isRoot: false
-            })
+            if (cache[node.id]) {
+              this.setState({
+                ...this.state,
+                depth: [...this.state.depth, node],
+                nodes: cache[node.id],
+                isRoot: false
+              })
+            } else {
+              const nextNodes = await api.fetchDirectory(node.id)
+              this.setState({
+                ...this.state,
+                depth: [...this.state.depth, node],
+                nodes: nextNodes,
+                isRoot: false
+              })
+              cache[node.id] = nextNodes
+            }
           } else if (node.type === 'FILE') {
             // 파일인 경우 이미지 보기 처리
             this.setState({
@@ -70,6 +82,7 @@ export default class App {
       },
       onBackClick: async () => {
         try {
+          // 로딩처리
           this.setState({
             ...this.state,
             isLoading: true
@@ -82,18 +95,16 @@ export default class App {
 
           // root로 온 경우이므로 root 처리
           if (prevNodeId === null) {
-            const rootNodes = await api.fetchRoot()
             this.setState({
               ...nextState,
               isRoot: true,
-              nodes: rootNodes
+              nodes: cache.root
             })
           } else {
-            const prevNodes = await api.fetchDirectory(prevNodeId)
             this.setState({
               ...nextState,
               isRoot: false,
-              nodes: prevNodes
+              nodes: cache[prevNodeId]
             })
           }
         } catch (error) {
@@ -119,6 +130,8 @@ export default class App {
           isRoot: true,
           nodes: rootNodes
         })
+
+        cache.root = rootNodes
       } catch (error) {
         throw new Error(`무언가 잘못 되었습니다! ${error.message}`)
       } finally {

@@ -44,7 +44,7 @@ export default class Nodes {
           this.onBackClick()
         }
         const selectedNode = this.state.nodes.find(node => node.id === nodeId)
-
+        console.log(selectedNode)
         if (selectedNode) {
           this.onClick(selectedNode)
         }
