@@ -7,6 +7,7 @@ export default class ImageView {
     this.$target.className = 'Modal ImageView'
 
     $app.appendChild(this.$target)
+    this.setEvent()
     this.render()
   }
 
@@ -19,5 +20,17 @@ export default class ImageView {
     this.$target.innerHTML = `<div class="content">${this.state ? `<img src="${IMAGE_PATH_PREFIX}${this.state}">` : ''}</div>`
 
     this.$target.style.display = this.state ? 'block' : 'none'
+  }
+
+  setEvent () {
+    document.addEventListener('keydown', (e) => {
+      if (e.keyCode === 27 || e.keyCode === 27) {
+        this.setState(false)
+      }
+    })
+    this.$target.addEventListener('click', (e) => {
+      if (e.target !== e.currentTarget) { return }
+      this.setState(false)
+    })
   }
 }
