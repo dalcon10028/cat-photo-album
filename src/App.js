@@ -24,7 +24,19 @@ export default class App {
     // imageView 생성
     this.imageView = new ImageView({
       $app,
-      initialState: this.state.selectedNodeImage
+      initialState: this.state.selectedNodeImage,
+      onClick: () => {
+        this.setState({
+          ...this.state,
+          selectedFilePath: null
+        })
+      },
+      onKeyDown: () => {
+        this.setState({
+          ...this.state,
+          selectedFilePath: null
+        })
+      }
     })
 
     // breadcrumb 생성
@@ -47,13 +59,11 @@ export default class App {
           return
         }
 
-        const nextState = { ...this.state }
         const nextDepth = this.state.depth.splice(0, index + 1)
-
         this.setState({
-          ...nextState,
+          ...this.state,
           depth: nextDepth,
-          nodes: cache[nextDepth[nextDepth.length - 1]]
+          nodes: cache[nextDepth[nextDepth.length - 1].id]
         })
       }
     })
@@ -105,41 +115,36 @@ export default class App {
           })
         }
       },
-      onBackClick: async () => {
-        try {
-          // 로딩처리
+      onBackClick: () => {
+        // 로딩처리
+        this.setState({
+          ...this.state,
+          isLoading: true
+        })
+
+        // 이전 state를 복사하여 처리
+        const nextState = { ...this.state }
+        nextState.depth.pop()
+        const prevNodeId = nextState.depth.length === 0 ? null : nextState.depth[nextState.depth.length - 1].id
+
+        // root로 온 경우이므로 root 처리
+        if (prevNodeId === null) {
           this.setState({
-            ...this.state,
-            isLoading: true
+            ...nextState,
+            isRoot: true,
+            nodes: cache.root
           })
-
-          // 이전 state를 복사하여 처리
-          const nextState = { ...this.state }
-          nextState.depth.pop()
-          const prevNodeId = nextState.depth.length === 0 ? null : nextState.depth[nextState.depth.length - 1].id
-
-          // root로 온 경우이므로 root 처리
-          if (prevNodeId === null) {
-            this.setState({
-              ...nextState,
-              isRoot: true,
-              nodes: cache.root
-            })
-          } else {
-            this.setState({
-              ...nextState,
-              isRoot: false,
-              nodes: cache[prevNodeId]
-            })
-          }
-        } catch (error) {
-          throw new Error(error.message)
-        } finally {
+        } else {
           this.setState({
-            ...this.state,
-            isLoading: false
+            ...nextState,
+            isRoot: false,
+            nodes: cache[prevNodeId]
           })
         }
+        this.setState({
+          ...this.state,
+          isLoading: false
+        })
       }
     })
 
