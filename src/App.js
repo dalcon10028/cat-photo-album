@@ -10,7 +10,7 @@ const cache = {}
 export default class App {
   constructor ($app) {
     this.state = {
-      isRoot: false,
+      isRoot: true,
       nodes: [],
       depth: [],
       selectedFilePath: null
@@ -30,7 +30,32 @@ export default class App {
     // breadcrumb 생성
     this.breadcrumb = new Breadcrumb({
       $app,
-      initialState: this.state.depth
+      initialState: [],
+      onClick: (index) => {
+        if (index === null) {
+          this.setState({
+            ...this.state,
+            depth: [],
+            nodes: cache.root,
+            isRoot: true
+          })
+          return
+        }
+
+        // breadcrumb에서 현재 위치를 누른 경우는 무시함
+        if (index === this.state.depth.length - 1) {
+          return
+        }
+
+        const nextState = { ...this.state }
+        const nextDepth = this.state.depth.splice(0, index + 1)
+
+        this.setState({
+          ...nextState,
+          depth: nextDepth,
+          nodes: cache[nextDepth[nextDepth.length - 1]]
+        })
+      }
     })
     // Nodes 생성
     this.nodes = new Nodes({
