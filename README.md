@@ -4,179 +4,188 @@
 
 [고양이 사진첩](https://hardcore-colden-8d5a28.netlify.app/)
 
-# **주제(시나리오)**
+# **문제지**
 
-고양이를 좋아하는 당신은 고양이 사진 전용 검색 웹사이트를 운영하고 있었습니다. 지금까지는 혼자 소소하게 운영해왔는데, 생각보다 고양이 사진을 원하는 사람들이 많아지면서 해결해야 할 문제들이 하나씩 드러나기 시작했어요. 몇 개의 문제는 금세 고칠 수 있지만, 기존 코드를 자세히 봐야만 고칠 수 있는 문제들도 있어서 조금 골치아픈 상황! 심지어 최대 4시간 내에 수정한 뒤 배포를 해야만 합니다. 당신이라면 기존 서비스의 여러 버그를 제한시간 내에 고치고, 유저를 위한 추가 기능까지 구현해볼 수 있을까요? 도전해보세요!
+당신은 고양이들을 모시고 있는 어느 집사에게 자신의 고양이 사진을 관리해달라는 의뢰를 받았습니다.
 
-# **과제 설명**
+의뢰인은 당신이 믿을만한 사람인지 테스트하기 위해, 약간의 사진을 당신에게 보냈으며 이 사진들을 웹에서 볼 수 있도록 해달라고 합니다.
 
-- thecatapi 에서 크롤링한 데이터를 이용해 이미지를 검색하는 베이스 코드가 주어집니다.
-- 베이스 코드는 모두 ES6 클래스 기반으로 작성되어 있으며, 이 코드에는 여러 개의 버그가 존재합니다. 요구사항을 잘 읽고, 버그를 하나씩 해결해주세요.
+이 사진을 어떻게 처리할까 고민 중이던 때, 당신의 절친한 친구 Back-end 개발자가 당신을 돕기 위해 의뢰인이 보낸 사진들을 API 형태로 만들어주었습니다.
 
-# **수행 기술**
+이 API를 이용해, 의뢰인을 만족시킬 수 있는 고양이 사진첩 애플리케이션을 만들어봅시다!
 
-- JavaScript(ES6)
-- 설치되어있는 모듈(node_modules) 외에 다른 외부 라이브러리는 사용하지 않도록 합니다. 예를들어 jQuery, Webpack, Lodash, Axios, Angular, React, Vue, Immutable-js, Ramda 등을 사용할 수 없습니다.
+# **애플리케이션 예시 이미지**
 
-# **요구사항**
+아래와 같이 디렉토리 구조를 따라 탐색할 수 있는 사진첩 애플리케이션을 만듭니다.
 
-**참고** 요구사항의 순서는 난이도와 상관이 없음
+### **root 경로 탐색 중인 경우**
 
-### **HTML, CSS 관련**
+![https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/9f2003a2-e5f8-4932-aa6f-c8eedd1380b8/img1.png](https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/9f2003a2-e5f8-4932-aa6f-c8eedd1380b8/img1.png)
 
-- 현재 HTML 코드가 전체적으로 `<div>` 로만 이루어져 있습니다. 이 마크업을 시맨틱한 방법으로 변경해야 합니다.
-- 유저가 사용하는 디바이스의 가로 길이에 따라 검색결과의 row 당 column 갯수를 적절히 변경해주어야 합니다.
-    - 992px 이하: 3개
-    - 768px 이하: 2개
-    - 576px 이하: 1개
-- 다크 모드(Dark mode)를 지원하도록 CSS를 수정해야 합니다.
-    - CSS 파일 내의 다크 모드 관련 주석을 제거한 뒤 구현합니다.
-    - 모든 글자 색상은 `#FFFFFF` , 배경 색상은 `#000000` 로 한정합니다.
-    - 기본적으로는 OS의 다크모드의 활성화 여부를 기반으로 동작하게 하되, 유저가 테마를 토글링 할 수 있도록 좌측 상단에 해당 기능을 토글하는 체크박스를 만듭니다.
+- 디렉토리를 클릭한 경우 해당 디렉토리 하위에 속한 디렉토리 / 파일들을 불러와 렌더링합니다.
+- 디렉토리 이동에 따라 위에 Breadcrumb 영역도 탐색한 디렉토리 순서에 맞게 업데이트가 되어야 합니다.
 
-### **이미지 상세 보기 모달 관련**
+### **root - 노란고양이(디렉토리) 를 탐색 중인 경우**
 
-- 디바이스 가로 길이가 768px 이하인 경우, 모달의 가로 길이를 디바이스 가로 길이만큼 늘려야 합니다.
-- **`필수`** 이미지를 검색한 후 결과로 주어진 이미지를 클릭하면 모달이 뜨는데, 모달 영역 밖을 누르거나 / 키보드의 ESC 키를 누르거나 / 모달 우측의 닫기(x) 버튼을 누르면 닫히도록 수정해야 합니다.
-- 모달에서 고양이의 성격, 태생 정보를 렌더링합니다. 해당 정보는 `/cats/:id` 를 통해 불러와야 합니다.
-- `추가` 모달 열고 닫기에 fade in/out을 적용해 주세요.
+![https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/29c29998-cc07-4296-a969-ad659db0ac2d/img2.png](https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/29c29998-cc07-4296-a969-ad659db0ac2d/img2.png)
 
-### **검색 페이지 관련**
+- 맨 왼쪽 화살표를 누른 경우, 이전 디렉토리로 돌아갑니다.
+- 파일을 누른 경우 해당 파일의 filePath 값을 이용해 이미지를 보여줍니다.
 
-- 페이지 진입 시 포커스가 `input` 에 가도록 처리하고, 키워드를 입력한 상태에서 `input` 을 클릭할 시에는 기존에 입력되어 있던 키워드가 삭제되도록 만들어야 합니다.
-- **`필수`** 데이터를 불러오는 중일 때, 현재 데이터를 불러오는 중임을 유저에게 알리는 UI를 추가해야 합니다.
-- **`필수`** 검색 결과가 없는 경우, 유저가 불편함을 느끼지 않도록 UI적인 적절한 처리가 필요합니다.
-- 최근 검색한 키워드를 `SearchInput` 아래에 표시되도록 만들고, 해당 영역에 표시된 특정 키워드를 누르면 그 키워드로 검색이 일어나도록 만듭니다. 단, 가장 최근에 검색한 5개의 키워드만 노출되도록 합니다.
-- 페이지를 새로고침해도 마지막 검색 결과 화면이 유지되도록 처리합니다.
-- **`필수`** SearchInput 옆에 버튼을 하나 배치하고, 이 버튼을 클릭할 시 `/api/cats/random50` 을 호출하여 화면에 뿌리는 기능을 추가합니다. 버튼의 이름은 마음대로 정합니다.
-- lazy load 개념을 이용하여, 이미지가 화면에 보여야 할 시점에 load 되도록 처리해야 합니다.
-- `추가` 검색 결과 각 아이템에 마우스 오버시 고양이 이름을 노출합니다.
+### **물 마시는 사진(파일)을 클릭한 경우**
 
-### **스크롤 페이징 구현**
+![https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/536fde41-33ec-4f40-b560-763bd6dc2bc7/img3.png](https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/536fde41-33ec-4f40-b560-763bd6dc2bc7/img3.png)
 
-- 검색 결과 화면에서 유저가 브라우저 스크롤 바를 끝까지 이동시켰을 경우, 그 다음 페이지를 로딩하도록 만들어야 합니다.
+- esc를 누르거나 사진 영역 밖을 클릭한 경우 이미지를 닫아야합니다.
 
-### **랜덤 고양이 배너 섹션 추가**
+# **구현 시 유의사항**
 
-- 현재 검색 결과 목록 위에 배너 형태의 랜덤 고양이 섹션을 추가합니다.
-- 앱이 구동될 때 `/api/cats/random50` api를 요청하여 받는 결과를 별도의 섹션에 노출합니다.
-- 검색 결과가 많더라도 화면에 5개만 노출하며 각 이미지는 좌, 우 슬라이드 이동 버튼을 갖습니다.
-- 좌, 우 버튼을 클릭하면, 현재 노출된 이미지는 사라지고 이전 또는 다음 이미지를 보여줍니다.(트렌지션은 선택)
+- 주어진 샘플 코드 내에서 구현을 해야합니다. 별도의 라이브러리 등을 설치하거나 불러와서 사용하는 행위는 금지합니다.
+- 각 화면의 UI요소는 가급적 컴포넌트 형태로 추상화 하여 동작하도록 합니다.
+    - 각 컴포넌트가 서로 의존성을 지니지 않고, App 혹은 그에 준하는 컴포넌트가 조율하는 형태로 동작하게 만드는 것을 지향합니다.
+- API 호출 중 에러가 발생했을 때의 처리를 한 경우 가산점이 있습니다.
+    - 의존성이 느슨한 구조로 작성한 경우 가산점이 있습니다.
+    - 오류가 발생한 경우를 체크하는 경우 가산점이 있습니다.
+    - 오류가 발생했음을 사용자에게 인지 시킨 경우 가산점이 있습니다.
+- ES6 모듈 형태로 작성한 경우 가산점이 있습니다.
+- API를 호출하는 함수는 가급적 `fetch` 함수를 사용합니다.
+    - async, await 문을 사용한 경우 가산점이 있습니다.
+    - `fetch` 외의 방법을 사용할 경우, 동기 호출 방식으로 사용해서는 안 됩니다.
+- API를 처리하는 코드를 별도의 코드로 분리해주세요.
+- 기본적으로 아래 마크업 가이드에서 제공하는 구조와 class명을 사용하여 작업합니다. 이를 처리하기 위한 style은 `src/styles/style.css` 에서 참고 할 수 있습니다.
+- 그 외 알아보기 쉬운 네이밍, 일관된 코드 포맷팅 규칙 등을 유지하도록 하며, 코드 중복은 지양합니다.
+- 전역 오염을 최소화 합니다.
+- 이벤트 바인딩은 가급적 최적화 해서 사용합니다.
 
-### **코드 구조 관련**
+# **필수 구현사항**
 
-- ES6 module 형태로 코드를 변경합니다.
-    - `webpack` , `parcel` 과 같은 번들러를 사용하지 말아주세요.
-    - 해당 코드 실행을 위해서는 `http-server` 모듈을(로컬 서버를 띄우는 다른 모듈도 사용 가능) 통해 `index.html` 을 띄워야 합니다.
-- API fetch 코드를 `async` , `await` 문을 이용하여 수정해주세요. 해당 코드들은 에러가 났을 경우를 대비해서 적절히 처리가 되어있어야 합니다.
-- **`필수`** API 의 status code 에 따라 에러 메시지를 분리하여 작성해야 합니다. 아래는 예시입니다.
+- app이라는 class를 가진 main에 애플리케이션을 렌더링합니다.
+- index.html에 기본으로 있는 마크업 구조를 참고하여, 애플리케이션을 크게 세 가지 영역으로 나누어서 렌더링합니다.
+    - `Breadcrumb` - 현재 탐색 중인 경로를 나타냅니다. root를 맨 왼쪽에 넣어야하며, 탐색하는 폴더 순서대로 나타냅니다.
+        - 사진첩을 처음 들어간 상태라면 root 경로를 탐색 중이므로 `root` 만 나와야 합니다.
+        - root를 기준으로 `노란고양이` 를 클릭했다면 `root - 노란고양이` 처럼 root를 시작지점으로 하여 거쳐간 디렉토리 이름을 순서대로 나열해야 합니다.
+        - 마크업은 아래를 참고합니다.
 
-```jsx
-const request = async (url: string) => {     
-	try {       
-		const result = await fetch(url);       
-		return result.json();     
-	} catch (e) {       
-		console.warn(e);     
-	}   
-}    
+        `<nav class="Breadcrumb">
+          <div>root</div>
+          <div>노란고양이</div>
+        </nav>`
 
-const api = {     
-	fetchGif: keyword => {       
-								return request(`${API_ENDPOINT}/api/gif/search?q=${keyword}`);     
-								},     
-	fetchGifAll: () => {       
-									return request(`${API_ENDPOINT}/api/gif/all`);     
-								}   
-};
-```
+    - `Nodes` - 현재 탐색 중인 경로에 속한 파일 / 디렉토리를 렌더링합니다. 렌더링 된 Node 클릭 시 node의 type에 따라 다음과 같은 일이 일어나야 합니다.
+        - DIRECTORY: 해당 디렉토리에 속한 파일 / 디렉토리를 불러와 아래의 형태로 렌더링합니다. 마크업은 아래 형태와 같습니다.
 
-- SearchResult 에 각 아이템을 클릭하는 이벤트를 Event Delegation 기법을 이용해 수정해주세요.
-- 컴포넌트 내부의 함수들이나 Util 함수들을 작게 잘 나누어주세요.
+        `<div class="Node">
+          <img src="./assets/directory.png">
+          <div>2021/04</div>
+        </div>`
 
-# **API**
+        - FILE: Node의 filePath값을 이용해 이미지를 불러와 화면에 렌더링합니다. 마크업은 아래 형태와 같습니다.
 
-### **1. GET /cats/random50**
+        `<div class="Node">
+          <img src="./assets/file.png">
+          <div>하품하는 사진</div>
+        </div>`
 
-### **Request parameter**
+        - root 경로가 아닌 경우, Nodes 목록 맨 왼쪽에 이전 디렉토리로 이동할 수 있는 기능을 구현해야 합니다. 마크업은 아래를 참고합니다.
 
-None
+        `<div class="Node">
+          <img src="./assets/prev.png">
+        </div>`
 
-### **Query paramter**
+    - `ImageView` - 파일을 클릭한 경우 Modal을 하나 띄우고 해당 Modal에서 파일의 이미지를 렌더링합니다. 마크업은 아래를 참고합니다.
 
-None
+    `<div class="ImageViewer">
+      <div class="content">
+        <img src="https://fe-dev-matching-2021-03-serverlessdeploymentbuck-t3kpj3way537.s3.ap-northeast-2.amazonaws.com/public/images/a2i.jpg">
+      </div>
+    </div>`
 
-### **Response**
+# **옵션 구현사항**
 
-Success 200
+아래의 구현사항은 필수는 아니지만, 구현 시 가산점이 있습니다.
 
-[제목 없음](https://www.notion.so/9e3566ecc66449489bc1d10ea87741f2)
+- Breadcrumb에 렌더링 된 경로 목록의 특정 아이템을 클릭하면, 해당 경로로 이동하도록 처리합니다. ex) Breadcrumb에 `root - 노란고양이 - 2021/04` 가 렌더링 된 상태인 경우
+    - `2021/04` 를 클릭한 경우 현재 경로와 같으므로 아무 일도 일어나지 않음
+    - `노란고양이` 를 클릭하면 노란고양이 경로 기준으로 파일 / 디렉토리 목록 렌더링
+    - `root` 를 클릭하면 root 경로 기준으로 파일 / 디렉토리 목록 렌더링.
+- 파일을 클릭하여 이미지를 보는 경우, 닫을 수 있는 처리를 해야합니다.
+    - ESC키를 눌렀을 때와 이미지 밖을 클릭했을 때, 둘 중 한 가지 혹은 두 가지 모두 처리합니다.
+- 데이터가 로딩 중인 경우는 로딩 중임을 알리는 UI적 처리를 해야하며, 로딩 중에는 디렉토리 이동이나 파일 클릭 등 액션이 일어나는 것을 막아야 합니다.
+- 한번 로딩된 데이터는 메모리에 캐시하고 이미 탐색한 경로를 다시 탐색할 경우 http 요청을 하지 말고 캐시된 데이터를 불러와 렌더링하도록 합니다.
 
-```json
-`HTTP/1.1 200 OK
-{
-  "data": [{
-    id: string
-    url: string
-    name: string
-  }]
+# **API 개요**
+
+두 개의 API를 사용합니다.
+
+### **root 내용 가져오기**
+
+- [https://zl3m4qq0l9.execute-api.ap-northeast-2.amazonaws.com/dev](https://zl3m4qq0l9.execute-api.ap-northeast-2.amazonaws.com/dev/)
+- method: GET
+
+사진첩의 root 경로에 있는 파일들과 디렉토리들을 불러옵니다.
+
+응답의 예시는 아래와 같습니다.
+
+`[
+  {
+        "id": "1",
+        "name": "노란고양이",
+        "type": "DIRECTORY",
+        "filePath": null,
+        "parent": null
+    },
+    {
+        "id": "3",
+        "name": "까만고양이",
+        "type": "DIRECTORY",
+        "filePath": null,
+        "parent": null
+    },
+ .....
+]`
+
+### **특정 디렉토리에 속하는 파일 / 디렉토리 불러오기**
+
+- [https://zl3m4qq0l9.execute-api.ap-northeast-2.amazonaws.com/dev/](https://zl3m4qq0l9.execute-api.ap-northeast-2.amazonaws.com/dev/):nodeId
+- method: GET
+
+nodeId 하위에 있는 파일 / 디렉토리 목록을 불러옵니다.
+
+응답의 예시는 아래와 같습니다.
+
+*`// https://zl3m4qq0l9.execute-api.ap-northeast-2.amazonaws.com/dev/1 호출 시*[
+    {
+        "id": "5",
+        "name": "2021/04",
+        "type": "DIRECTORY",
+        "filePath": null,
+        "parent": {
+            "id": "1"
+        }
+    },
+    {
+        "id": "19",
+        "name": "물 마시는 사진",
+        "type": "FILE",
+        "filePath": "/images/a2i.jpg",
+        "parent": {
+            "id": "1"
+        }
+    }
+]`
+
+두 API에서 사용하는 데이터의 형태는 모두 아래의 형태를 띕니다.
+
+`{
+  "id":       string *// 문자열로 된 Node의 고유값입니다.*"name":     string *// 디렉토리 혹은 파일의 이름입니다. 화면에 표시할 때 사용합니다.*"type":     string *// 파일인지 디렉토리인지 여부입니다. 파일인 경우 FILE, 디렉토리인 경우 DIRECTORY 입니다.*"filePath": string *// 파일인 경우에 존재하는 값입니다. 해당 파일 이미지를 불러오기 위한 경로가 들어있습니다.*"parent":   object | null {
+    "id": string *// 해당 Node가 어디에 속하는지 나타내는 값입니다. parent가 null이면 root에 존재하는 파일 / 디렉토리입니다.*}
 }`
-```
 
-### **2. GET /cats/search**
+### **이미지 불러오기**
 
-### **Request parameter**
+- Node의 filePath 값을 아래의 값과 조합하여, 이미지를 불러올 수 있는 주소를 만들 수 있습니다.
+- filePath 맨 앞에 /가 포함될 수도 있으므로, 아래의 값과 잘 조합하여 이미지를 불러오도록 합니다.
 
-None
+`https:*//fe-dev-matching-2021-03-serverlessdeploymentbuck-t3kpj3way537.s3.ap-northeast-2.amazonaws.com/public/${node.filePath}*`
 
-### **Query paramter**
-
-[제목 없음](https://www.notion.so/b86ef93f253547dc87890c676becd0e5)
-
-### **Response**
-
-Success 200
-
-[제목 없음](https://www.notion.so/55dd187a03124dceb4f0a2dda2073d96)
-
-```json
-`HTTP/1.1 200 OK
-{
-  "data": [{
-    id: string
-    url: string
-    name: string
-  }]
-}`
-```
-
-### **3. GET /cats/:id**
-
-### **Request parameter**
-
-[제목 없음](https://www.notion.so/c09a004b1eac41749b0fb549cc567c7e)
-
-### **Query paramter**
-
-None
-
-### **Response**
-
-Success 200
-
-[제목 없음](https://www.notion.so/bf7764b813ce4f12a94ddefd9a6fbaf1)
-
-```json
-`HTTP/1.1 200 OK
-{
-  "data": {
-    name: string
-    id: string
-    url: string
-    width: number
-    height: number
-    temperament: string
-    origin: string
-  }
-}`
-```
+**[닫기](https://programmers.co.kr/assignment_tokens/1074189/code_view#)**
