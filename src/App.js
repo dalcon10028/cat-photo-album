@@ -116,12 +116,6 @@ export default class App {
         }
       },
       onBackClick: () => {
-        // 로딩처리
-        this.setState({
-          ...this.state,
-          isLoading: true
-        })
-
         // 이전 state를 복사하여 처리
         const nextState = { ...this.state }
         nextState.depth.pop()
@@ -141,10 +135,6 @@ export default class App {
             nodes: cache[prevNodeId]
           })
         }
-        this.setState({
-          ...this.state,
-          isLoading: false
-        })
       }
     })
 
