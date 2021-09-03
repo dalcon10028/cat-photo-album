@@ -1,7 +1,7 @@
-import App from "./App.js";
+import App from './App.js'
 
 const config = {
   el: '.app'
-};
+}
 
-App.create(config);
+App.create(config)
