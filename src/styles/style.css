@@ -86,6 +86,6 @@ img {
 .node:hover {
   cursor: pointer;
   border-radius: 7px;
-  background-color:cornflowerblue;
-  color: white;
+  border: 3px double rgba(204, 5, 187, 0.3);
+  box-shadow: 5px 5px 5px rgba(0,0,0,0.3);
 }
