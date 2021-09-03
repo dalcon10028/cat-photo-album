@@ -48,6 +48,11 @@ body {
   padding: 4px;
 }
 
+.Breadcrumb > div:hover {
+  cursor: pointer;
+  color: blue;
+}
+
 .Breadcrumb > div::after {
   content: " -";
 }
@@ -75,4 +80,12 @@ body {
 
 img {
   max-width: 80vw;
+  max-height: 90vh;
+}
+
+.node:hover {
+  cursor: pointer;
+  border-radius: 7px;
+  background-color:cornflowerblue;
+  color: white;
 }

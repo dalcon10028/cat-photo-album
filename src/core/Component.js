@@ -1,18 +1,24 @@
+import { observable, observe } from "./Observer.js";
+
 export default class Component {
   constructor(target, props = {}) {
     this.target = target;
     this.props = props;
+    this.state = observable({});
 
-    this.created();
-    this.render();
-    this.mounted();
+    this.setEvents();
+    observe(() => {
+      this.created();
+      this.render();
+      this.mounted();
+    });
   }
 
   created() {}
 
   mounted() {}
 
-  events() {}
+  setEvents() {}
 
   template() {
     return '';

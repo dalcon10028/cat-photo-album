@@ -7,6 +7,7 @@ import ImageViewer from "./components/ImageViewer.js";
 // Others
 import { $ } from "./utils/dom.js";
 import Component from "./core/Component.js";
+import { store } from "./store/index.js";
 
 export default class App extends Component {
   static create({ el }) {
@@ -14,11 +15,15 @@ export default class App extends Component {
     return new App($app);
   }
 
+  async created() {
+    await store.dispatch('fetchHomeDirectory');
+  }
+
   mounted() {
     new Breadcrumb($('.breadcrumb'));
     new Nodes($('.nodes'));
     new Loading($('.Loading'));
-    new ImageViewer($('.ImageViewer'))
+    new ImageViewer($('.ImageViewer'));
   }
 
   template() {
